@@ -1,0 +1,1 @@
+# faktisk-rekkevidde
