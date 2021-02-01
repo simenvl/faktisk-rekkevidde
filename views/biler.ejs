@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="nb">
+
+<head>
+    <%- include('./template/head'); %>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Biler</h1>
+        <div class="table-responsive">
+            <table class="table">
+                <th>#</th>
+                <th>Bil</th>
+                <th>Sesong</th>
+                <th>Tempratur</th>
+                <% for (let i = 0; i < data.length; i++) { %>
+                <tr>
+                    <td><%- data[i].id %> </td>
+                    <td><%- data[i].car %> </td>
+                    <td><%- data[i].season %> </td>
+                    <td><%- data[i].temp %> </td>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
+<%- include('./template/footer.ejs') %>

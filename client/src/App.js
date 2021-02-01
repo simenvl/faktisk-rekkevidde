@@ -1,8 +1,7 @@
 import './App.css';
 
 function App() {
-  
-  
+
   const hitBackend = () => {
     const div = document.getElementById('response');
     fetch('/test')
@@ -21,7 +20,7 @@ function App() {
     }
   return (
     <div className="App">
-      <button onClick={hitBackend}>Send request</button>
+      <button  type="button" class="btn btn-primary" onClick={hitBackend}>Send request</button>
 
       <div id="response">
 
