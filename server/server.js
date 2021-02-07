@@ -70,11 +70,16 @@ app.post("/register", async (req, res) => {
       `SELECT * FROM users 
       WHERE email = $1`,
       [email],
-      (err, res) => {
+      (err, results) => {
         if (err) {
           throw err;
         }
-        console.log(res.rows);
+        console.log(results.rows);
+
+        if (results.rows.length > 0) {
+          errors.push({ message: "Email already registered" });
+          res.json({ errors: errors });
+        }
       }
     );
   }
