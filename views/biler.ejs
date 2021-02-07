@@ -7,7 +7,7 @@
 
 <body>
     <div class="container">
-        <h1>Biler</h1>
+        <h1>Faktisk rekkevidde</h1>
         <div class="table-responsive">
             <table class="table">
                 <th>#</th>
@@ -20,6 +20,9 @@
                     <td><%- data[i].car %> </td>
                     <td><%- data[i].season %> </td>
                     <td><%- data[i].temp %> </td>
+                    <td><%- data[i].speed %> km/h</td>
+                    <td><%- data[i].wh_km %> wh/km</td>
+                    <td><%- data[i].distance_km %> km</td>
                 </tr>
                 <% } %>
             </table>
