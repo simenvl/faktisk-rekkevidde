@@ -7,7 +7,8 @@ export default function Register() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [password2, setPassword2] = useState();
-  const [errorMessage, setErrorMessage] = useState([]);
+  const [responseMessage, setResponseMessage] = useState([]);
+  //const [redirect, setRedirect] = useState(false);
 
   const handleChangeName = (e) => {
     setName(e.target.value);
@@ -31,6 +32,8 @@ export default function Register() {
       password2: password2,
     };
 
+    setResponseMessage([]);
+
     console.log(user);
 
     fetch("/register", {
@@ -42,15 +45,17 @@ export default function Register() {
     })
       .then((response) => response.json())
       .then((data) => {
-        const errors = data.errors;
-        errors.forEach((element) => {
-          setErrorMessage((prevErrorMessage) => [
-            ...prevErrorMessage,
-            element.message,
-          ]);
-          console.log(element);
-        });
-        console.log(errors);
+        if (data.success) {
+          console.log(data.redirectUrl);
+          //setRedirect(true);
+        } else {
+          console.log(data.errors);
+          const errors = data.errors;
+          console.log(data);
+          errors.forEach((element) => {
+            setResponseMessage([element.message]);
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -66,7 +71,7 @@ export default function Register() {
         <Card.Body>
           <h1>Registrer</h1>
           <p>
-            {errorMessage.map((e) => (
+            {responseMessage.map((e) => (
               <li>{e}</li>
             ))}
           </p>

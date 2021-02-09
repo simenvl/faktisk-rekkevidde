@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const router = express.Router();
-const db = require("../server/db");
+const pool = require("../server/db");
 
 router.get("/biler", async (req, res) => {
-  await db.query("SELECT * FROM ev_range", null, (error, result) => {
+  await pool.query("SELECT * FROM ev_range", null, (error, result) => {
     if (error) {
       throw error;
     }

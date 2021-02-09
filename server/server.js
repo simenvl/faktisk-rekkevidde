@@ -5,24 +5,33 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
 const path = require("path");
+const session = require("express-session");
+const flash = require("express-flash");
 
-const bcrypt = require("bcrypt");
-
-//const loginRouter = require("../routes/login");
+// ROUTES
 const bilerRouter = require("../routes/biler");
 const indexRouter = require("../routes/index");
 const apiCarsRouter = require("../routes/api-cars");
-const pool = require("./db");
+const registerRouter = require("../routes/register");
 
-// config
+// CONFIG
 
 app.use(express.static(path.join(__dirname + "/../public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/../views"));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(flash());
 
 app.get("/", (req, res) => {
   res.send("Index");
@@ -36,54 +45,7 @@ app.get("/login", (req, res) => {
   res.send("Login");
 });
 
-app.post("/register", async (req, res) => {
-  let { name, email, password, password2 } = req.body;
-
-  console.log({
-    name,
-    email,
-    password,
-    password2,
-  });
-
-  let errors = [];
-
-  if (!name || !email || !password || !password2) {
-    errors.push({ message: "Skriv inn i alle felter" });
-  }
-
-  if (password.length < 6) {
-    errors.push({ message: "Passordet må inneholde minimum 6 tegn" });
-  }
-
-  if (password != password2) {
-    errors.push({ message: "Passordene er ulike" });
-  }
-
-  if (errors.length > 0) {
-    res.json({ errors: errors });
-  } else {
-    let hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-
-    pool.query(
-      `SELECT * FROM users 
-      WHERE email = $1`,
-      [email],
-      (err, results) => {
-        if (err) {
-          throw err;
-        }
-        console.log(results.rows);
-
-        if (results.rows.length > 0) {
-          errors.push({ message: "Email already registered" });
-          res.json({ errors: errors });
-        }
-      }
-    );
-  }
-});
+app.post("/register", registerRouter);
 
 app.get("/dashboard", (req, res) => {
   res.send("Dasboard");
