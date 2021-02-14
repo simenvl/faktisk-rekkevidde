@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState();
@@ -8,7 +8,8 @@ export default function Register() {
   const [password, setPassword] = useState();
   const [password2, setPassword2] = useState();
   const [responseMessage, setResponseMessage] = useState([]);
-  //const [redirect, setRedirect] = useState(false);
+
+  let history = useHistory();
 
   const handleChangeName = (e) => {
     setName(e.target.value);
@@ -34,8 +35,6 @@ export default function Register() {
 
     setResponseMessage([]);
 
-    console.log(user);
-
     fetch("/register", {
       method: "POST",
       headers: {
@@ -45,17 +44,20 @@ export default function Register() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
-          console.log(data.redirectUrl);
-          //setRedirect(true);
-        } else {
-          console.log(data.errors);
-          const errors = data.errors;
-          console.log(data);
-          errors.forEach((element) => {
+        const respMessage = data.message;
+        respMessage.forEach((element) => {
+          if (data.success) {
             setResponseMessage([element.message]);
-          });
-        }
+            history.push({
+              pathname: "/login",
+              state: {
+                message: responseMessage,
+              },
+            });
+          } else {
+            setResponseMessage([element.message]);
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -131,7 +133,7 @@ export default function Register() {
             >
               Registrer
             </Button>
-            <Link to="/">Allerede registrert?</Link>
+            <Link to="/login">Allerede registrert?</Link>
           </Form>
         </Card.Body>
       </Card>

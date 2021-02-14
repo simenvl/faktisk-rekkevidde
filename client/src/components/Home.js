@@ -1,17 +1,10 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import React from "react";
-import Login from "./Login";
-import Register from "./Register";
+import { Container } from "react-bootstrap";
 
-function App() {
+export default function Home() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-      </Switch>
-    </Router>
+    <Container className="mx-auto">
+      <h1>Velkommen</h1>
+    </Container>
   );
 }
-
-export default App;

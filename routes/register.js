@@ -41,13 +41,12 @@ router.post("/register", async (req, res) => {
         if (err) {
           throw err;
         }
-        console.log(results.rows);
 
         if (results.rows.length > 0) {
           errors.push({ message: "Epost allerede registrert" });
           res.status(200).json({
             success: false,
-            errors: errors,
+            message: errors,
           });
         } else {
           pool.query(
@@ -60,10 +59,9 @@ router.post("/register", async (req, res) => {
                 throw err;
               }
               console.log(results.rows);
-              req.flash("success_msg", "Du er nå registrert");
               res.status(200).json({
                 success: true,
-                redirectUrl: "/",
+                message: "Du er nå registrert",
               });
             }
           );
